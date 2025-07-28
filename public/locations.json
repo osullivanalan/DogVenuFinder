@@ -1,0 +1,355 @@
+[
+  {
+    "Name": "Grindstone Coffee",
+    "Address": "50 Mayor Street Upper, North Wall, Dublin 1, D01 A2N6",
+    "ZipCode": "D01 A2N6",
+    "Hours": {
+      "Mon-Fri": "07:30 - 15:00",
+      "Sat": "09:00 - 15:00",
+      "Sun": "09:00 - 15:00"
+    },
+    "Type": "Coffee",
+    "OutDoorOnly": false,
+    "Info": "",
+    "Link": "https://www.brickyard.ie/pages/grindstone",
+    "Location": "Dublin 1",
+    "Latitude": 53.350284,
+    "Longitude": -6.241618
+  },
+  {
+    "Name": "Toca - Tapioca House",
+    "Address": "49 Fleet St, Temple Bar, Dublin, D02 XW26, Ireland",
+    "ZipCode": "D02 XW26",
+    "Hours": {
+      "Mon-Sun": "09:00 - 18:00"
+    },
+    "Type": "Restaurant",
+    "Info": "Dogs allowed inside",
+    "OutDoorOnly": false,
+    "Link": "https://tocatapioca.com",
+    "Location": "Dublin 2",
+    "Latitude": 53.345775,
+    "Longitude": -6.257488
+  },
+  {
+    "Name": "BrewDog Outpost Dublin",
+    "Address": "Three Locks Square, 4, Grand Canal Dock, Dublin 2, D02 E5R7",
+    "ZipCode": "D02 E5R7",
+    "Hours": {
+      "Mon-Fri": "11:00 - 23:00",
+      "Sat": "10:00 - 23:30",
+      "Sun": "10:00 - 23:00"
+    },
+    "Type": "Restaurant",
+    "Info": "Dogs allowed inside; Dog bowls of water upon request",
+    "OutDoorOnly": false,
+    "Link": "https://linktr.ee/brewdogoutpostdublin",
+    "Location": "Dublin 2",
+    "Latitude": 53.342997,
+    "Longitude": -6.237800
+  },
+  {
+    "Name": "Isabelle's",
+    "Address": "13-14 Anne St S, Dublin, D02 HP70",
+    "ZipCode": "D02 HP70",
+    "Hours": {
+      "Mon-Fri": "12:00 - 15:30, 17:00 - 21:00",
+      "Sat": "10:00 - 15:30, 17:00 - 22:00",
+      "Sun": "10:00 - 15:30, 17:00 - 21:00"
+    },
+    "Type": "Restaurant",
+    "Info": "Terrace only",
+    "OutDoorOnly": true,
+    "Link": "https://isabelles.ie/",
+    "Location": "Dublin 2",
+    "Latitude": 53.343695,
+    "Longitude": -6.259403
+  },
+  {
+    "Name": "Street 66",
+    "Address": "33-34 Parliament St, Temple Bar, Dublin 2",
+    "ZipCode": "",
+    "Hours": {
+      "Mon-Thu": "15:00 - 23:30",
+      "Fri": "15:00 - 02:30",
+      "Sat": "13:00 - 02:30",
+      "Sun": "13:00 - 23:30"
+    },
+    "Type": "Pub",
+    "Info": "Dogs allowed inside; Dog bowls of water upon request; LGBTQIA+ friendly",
+    "OutDoorOnly": false,
+    "Link": "",
+    "Location": "Dublin 2",
+    "Latitude": 53.344519,
+    "Longitude": -6.268525
+  },
+  {
+    "Name": "Happy Out",
+    "Address": "Bull Wall, Bull Island, Clontarf, Dublin",
+    "ZipCode": "",
+    "Hours": {
+      "Summer": {
+        "Mon-Sun": "09:00 - 17:00"
+      },
+      "Winter": {
+        "Mon-Sun": "09:00 - 16:00"
+      }
+    },
+    "Type": "Coffee",
+    "Info": "Terrace only",
+    "OutDoorOnly": true,
+    "Link": "https://happyout.ie/",
+    "Location": "Dublin 3",
+    "Latitude": 53.367564,
+    "Longitude": -6.143856
+  },
+  {
+    "Name": "Grindstone Coffee",
+    "Address": "Bolands Quay, Barrow St, Dublin 4, D04 F6T8",
+    "ZipCode": "D04 F6T8",
+    "Hours": {
+      "Mon-Fri": "07:30 - 15:00",
+      "Sat": "09:00 - 15:00",
+      "Sun": "09:00 - 15:00"
+    },
+    "Type": "Coffee",
+    "Info": "",
+    "OutDoorOnly": false,
+    "Link": "https://www.brickyard.ie/pages/grindstone",
+    "Location": "Dublin 4",
+    "Latitude": 53.339444,
+    "Longitude": -6.237500
+  },
+  {
+    "Name": "Happy Out",
+    "Address": "81 Morehampton Rd, Donnybrook, Dublin 4, D04 X8R5",
+    "ZipCode": "D04 X8R5",
+    "Hours": {
+      "Mon-Fri": "07:30 - 16:00",
+      "Sat": "08:00 - 16:00",
+      "Sun": "09:00 - 16:00"
+    },
+    "Type": "Coffee",
+    "Info": "",
+    "OutDoorOnly": false,
+    "Link": "https://happyout.ie/",
+    "Location": "Dublin 4",
+    "Latitude": 53.322508,
+    "Longitude": -6.243124
+  },
+  {
+    "Name": "Doyles Corner",
+    "Address": "160/161 Phibsborough Rd, Phibsborough, Dublin 7, D07 R26N",
+    "ZipCode": "D07 R26N",
+    "Hours": {
+      "Mon-Wed": "11:00 - 15:30",
+      "Thu": "12:30 - 23:30",
+      "Fri-Sat": "12:30 - 00:30",
+      "Sun": "12:30 - 23:00"
+    },
+    "Type": "Pub",
+    "Info": "Dogs allowed inside; Dog bowl upon request",
+    "OutDoorOnly": false,
+    "Link": "https://www.instagram.com/doylescorner",
+    "Location": "Dublin 7",
+    "Latitude": 53.364240,
+    "Longitude": -6.270524
+  },
+  {
+    "Name": "Stay With Us",
+    "Address": "324B North Circular Road, Phibsborough, Dublin, Ireland D07 NX86",
+    "ZipCode": "D07 NX86",
+    "Hours": {
+      "Mon-Fri": "07:00 - 18:00",
+      "Sat-Sun": "08:00 - 17:00"
+    },
+    "Type": "Cafe",
+    "Info": "",
+    "OutDoorOnly": false,
+    "Link": "https://www.staywithus.ie/",
+    "Location": "Dublin 7",
+    "Latitude": 53.362152,
+    "Longitude": -6.276404
+  },
+  {
+    "Name": "The Barbers Bar",
+    "Address": "19 Grangegorman Road Lower, Dublin 7",
+    "ZipCode": "",
+    "Hours": {
+      "Mon-Thu": "12:00 - 23:30",
+      "Fri": "12:00 - 00:30",
+      "Sat": "13:00 - 00:30",
+      "Sun": "13:00 - 23:00"
+    },
+    "Type": "Pub",
+    "Info": "Dogs allowed inside; Under bench seating for dogs; Dog birthday parties; Food by Tokyo Kitchen",
+    "OutDoorOnly": false,
+    "Link": "https://thebarbers.ie/dog-friendly/",
+    "Location": "Dublin 7",
+    "Latitude": 53.358815,
+    "Longitude": -6.278981
+  },
+  {
+    "Name": "Braza Food",
+    "Address": "19 Clanbrassil Street Lower, Portobello, Dublin 8, D08 X798",
+    "ZipCode": "D08 X798",
+    "Hours": {
+      "Tue-Fri": "17:00 - 23:00",
+      "Sat": "12:00 - 23:00",
+      "Sun": "12:00 - 21:45"
+    },
+    "Type": "Restaurant",
+    "Info": "Hot dogs, burgers, Brazilian snacks",
+    "OutDoorOnly": false,
+    "Link": "https://brazafood.ie",
+    "Location": "Dublin 8",
+    "Latitude": 53.333645,
+    "Longitude": -6.276176
+  },
+  {
+    "Name": "The Fumbally",
+    "Address": "Fumbally Lane, The Liberties, D08 HFF2",
+    "ZipCode": "D08 HFF2",
+    "Hours": {
+      "Mon-Sun": "08:00 - 15:00"
+    },
+    "Type": "Restaurant",
+    "Info": "Dogs allowed inside; Breakfast/Brunch/Lunch",
+    "OutDoorOnly": false,
+    "Link": "https://thefumbally.ie",
+    "Location": "Dublin 8",
+    "Latitude": 53.339100,
+    "Longitude": -6.277300
+  },
+  {
+    "Name": "The Cheeky Piglet",
+    "Address": "Fumbally Lane, Dublin 8, D08 CPW3",
+    "ZipCode": "D08 CPW3",
+    "Hours": {
+      "Mon-Fri": "08:30 - 16:00",
+      "Sat-Sun": "09:00 - 16:00"
+    },
+    "Type": "Restaurant",
+    "Info": "Dogs allowed inside; Large area for dogs to run",
+    "OutDoorOnly": false,
+    "Link": "https://thecheekypiglet.com/",
+    "Location": "Dublin 8",
+    "Latitude": 53.338900,
+    "Longitude": -6.277600
+  },
+  {
+    "Name": "Pye",
+    "Address": "Main Street, Dundrum, D14 V9R3",
+    "ZipCode": "D14 V9R3",
+    "Hours": {
+      "Mon-Thu": "15:00 - 23:30",
+      "Fri": "13:00 - 00:30",
+      "Sat": "10:45 - 00:30",
+      "Sun": "12:00 - 23:00"
+    },
+    "Type": "Pub",
+    "Info": "Dogs allowed inside; Dog vending machines; Kennel seating",
+    "OutDoorOnly": false,
+    "Link": "https://pye.ie/dog-friendly/",
+    "Location": "Dublin 14",
+    "Latitude": 53.290520,
+    "Longitude": -6.243560
+  },
+  {
+    "Name": "Coffee Works",
+    "Address": "Unit 8, Saint Brigid's Shopping Centre, Blanchardstown, Dublin, D15 EKC7",
+    "ZipCode": "D15 EKC7",
+    "Hours": {
+      "Mon-Fri": "07:30 - 17:00",
+      "Sat-Sun": "08:00 - 16:00"
+    },
+    "Type": "Coffee",
+    "Info": "",
+    "OutDoorOnly": false,
+    "Link": "",
+    "Location": "Dublin 15",
+    "Latitude": 53.395600,
+    "Longitude": -6.388300
+  },
+  {
+    "Name": "Grindstone Coffee",
+    "Address": "Overend Ave, Dundrum, Dublin, D16 PK60",
+    "ZipCode": "D16 PK60",
+    "Hours": {
+      "Mon-Fri": "07:30 - 18:00",
+      "Sat-Sun": "09:00 - 18:00"
+    },
+    "Type": "Coffee",
+    "Info": "",
+    "OutDoorOnly": false,
+    "Link": "https://www.brickyard.ie/pages/grindstone",
+    "Location": "Dublin 16",
+    "Latitude": 53.294350,
+    "Longitude": -6.234781
+  },
+  {
+    "Name": "Foxhunter",
+    "Address": "Foxhunter, Ballydowd, Lucan, Co. Dublin, K78 P285",
+    "ZipCode": "K78 P285",
+    "Hours": {
+      "Mon-Thu": "15:00 - 23:00",
+      "Fri-Sat": "12:00 - 00:30",
+      "Sun": "12:00 - 23:00"
+    },
+    "Type": "Pub",
+    "Info": "Dogs allowed indoors",
+    "OutDoorOnly": false,
+    "Link": "",
+    "Location": "Co Dublin",
+    "Latitude": 53.374200,
+    "Longitude": -6.486700
+  },
+  {
+    "Name": "Coffee Works",
+    "Address": "Main St, Lucan And Pettycanon, Lucan, Co. Dublin",
+    "ZipCode": "",
+    "Hours": {
+      "Mon-Fri": "07:30 - 17:00",
+      "Sat-Sun": "08:00 - 16:00"
+    },
+    "Type": "Coffee",
+    "Info": "Dogs allowed indoors",
+    "OutDoorOnly": false,
+    "Link": "",
+    "Location": "Co Dublin",
+    "Latitude": 53.372850,
+    "Longitude": -6.470130
+  },
+  {
+    "Name": "Coffee Works",
+    "Address": "62 Main St, Townparks, Swords, Co. Dublin, K67 RX94",
+    "ZipCode": "K67 RX94",
+    "Hours": {
+      "Mon-Fri": "07:30 - 17:00",
+      "Sat-Sun": "08:00 - 16:00"
+    },
+    "Type": "Coffee",
+    "Info": "Dogs allowed indoors",
+    "OutDoorOnly": false,
+    "Link": "",
+    "Location": "Co Dublin",
+    "Latitude": 53.456700,
+    "Longitude": -6.217900
+  },
+  {
+    "Name": "NINE",
+    "Address": "9b Albert Walk, Bray",
+    "ZipCode": "",
+    "Hours": {
+      "Mon-Fri": "08:00 - 15:00",
+      "Sat-Sun": "09:00 - 15:00"
+    },
+    "Type": "Restaurant",
+    "Info": "Dogs allowed inside",
+    "OutDoorOnly": false,
+    "Link": "https://ninebray.com/",
+    "Location": "Bray",
+    "Latitude": 53.203900,
+    "Longitude": -6.106400
+  }
+]
