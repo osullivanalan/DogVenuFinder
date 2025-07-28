@@ -6,6 +6,7 @@ import { Marker, Popup, useMap } from 'react-leaflet';
 
 const DEFAULT_ZOOM = 12;
 const USER_LOC_COLOR = 'grey';   // or use '#888'/'#bbb' for a grey shade
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
 const UserLocationMarker = ({ position }: { position: [number, number] }) =>
     position ? <CircleMarker
@@ -97,7 +98,8 @@ export default function LeafletMap() {
     } | null>(null);
 
     useEffect(() => {
-        fetch('/locations.json')
+        fetch(`${basePath}/locations.json`)
+
             .then(res => res.json())
             .then((data: Venue[]) => setVenues(data))
             .catch(console.error);
