@@ -23,5 +23,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
-  }
+  },
+  "homepage": "https://osullivanalan.github.io/DogVenuFinder"
+
 }
