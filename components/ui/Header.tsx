@@ -1,4 +1,4 @@
-function Header({ onMyLocationClick }) {
+function Header() {
   return (
     <>
       <header className="app-header">
@@ -7,12 +7,14 @@ function Header({ onMyLocationClick }) {
             <i className="fas fa-dog"></i>
             Dog-Friendly Ireland
           </h1>
-          <div className="header-controls">
+          {/*<div className="header-controls">
             <button id="location-btn" className="btn btn--secondary btn--sm" onClick={onMyLocationClick}>
               <i className="fas fa-crosshairs"></i>
               My Location
             </button>
           </div>
+          */
+          }
         </div>
       </header>
 

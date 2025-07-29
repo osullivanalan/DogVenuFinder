@@ -2,7 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { distanceMiles, MILES_TO_KM } from '../../lib/geo';
 import * as React from 'react';
-import { Marker, Popup, useMap } from 'react-leaflet';
+import { Marker, Popup, useMap, Tooltip } from 'react-leaflet';
+import RecenterButton from './RecenterButton';   // ← add
+
 
 const DEFAULT_ZOOM = 12;
 const USER_LOC_COLOR = 'grey';   // or use '#888'/'#bbb' for a grey shade
@@ -125,6 +127,7 @@ export default function LeafletMap() {
             style={{ height: '100vh', width: '100%' }}
             scrollWheelZoom
         >
+            <RecenterButton />
             <SetViewOnLocation userLoc={userLoc} zoom={DEFAULT_ZOOM} />
             <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -160,8 +163,18 @@ export default function LeafletMap() {
                                 fillOpacity: 0.8
                             }}
                             radius={14}
-                        >
 
+                        >
+                            {v.OutDoorOnly && (
+                                <Tooltip
+                                    direction="center"   // keeps it centred
+                                    permanent            // always visible
+                                    className="outdoor-flag"
+                                    offset={[0, 0]}      // no offset
+                                >
+                                    T
+                                </Tooltip>
+                            )}
                             <Popup>
                                 <div className="space-y-2 w-56">
                                     <h3 className="text-lg font-bold">{v.Name}</h3>
