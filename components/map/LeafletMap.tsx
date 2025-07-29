@@ -7,15 +7,23 @@ import RecenterButton from './RecenterButton';   // ← add
 
 
 const DEFAULT_ZOOM = 12;
-const USER_LOC_COLOR = 'grey';   // or use '#888'/'#bbb' for a grey shade
+const USER_LOC_COLOR = 'white';   // or use '#888'/'#bbb' for a grey shade
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
 const UserLocationMarker = ({ position }: { position: [number, number] }) =>
     position ? <CircleMarker
         center={position}
-        pathOptions={{ color: USER_LOC_COLOR, fillColor: USER_LOC_COLOR, fillOpacity: 0.8 }}
+        pathOptions={{ color: USER_LOC_COLOR, fillColor: USER_LOC_COLOR, fillOpacity: 0.4 }}
         radius={12} // Size as desired
-    /> : null;
+    > <Tooltip
+        direction="center"   // keeps it centred
+        permanent            // always visible
+        className="outdoor-flag"
+        offset={[0, 0]}      // no offset
+    >
+            📍
+        </Tooltip>
+    </CircleMarker> : null;
 
 
 const isOpen = (Hours) => {
