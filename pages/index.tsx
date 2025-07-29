@@ -23,7 +23,7 @@ export default function HomePage() {
                 <title>Find Doggie Venues Near Me</title>
                 <meta name="description" content="Discover cafés, pubs, and restaurants within 100 miles." />
             </Head>
-            <Header onMyLocationClick={() => mapRef.current?.goToUserLocation()} />
+            <Header/>
             <LeafletMap />
         </>
     );
