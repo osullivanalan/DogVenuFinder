@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { distanceMiles, MILES_TO_KM } from '../../lib/geo';
 import * as React from 'react';
@@ -67,8 +67,10 @@ const CircleMarker = dynamic(
     () => import('react-leaflet').then(mod => mod.CircleMarker),
     { ssr: false }
 );
-const MarkerClusterGroup = dynamic(
-    () => import('react-leaflet-markercluster').then(mod => mod.default as React.ComponentType<React.PropsWithChildren<unknown>>),
+import type { MarkerClusterGroupProps } from 'react-leaflet-markercluster';
+
+const MarkerClusterGroup = dynamic<MarkerClusterGroupProps>(
+    () => import('react-leaflet-markercluster').then(mod => mod.default),
     { ssr: false }
 );
 
@@ -82,9 +84,14 @@ type Venue = {
     OutDoorOnly?: boolean;
     Hours: object; // e.g. { Monday: '09:00-17:00', ... }
     Info?: string;
-    Link: string;
-    Location?: string; // Optional field for additional location info
-    ZipCode: string
+    Link?: string;
+    State?: string;
+    Phone?: string,
+    Rating?: number,
+    Indoor?: boolean,
+    Outdoor?: boolean,
+    GooglePlaceId?: string,
+    ZipCode?: string,
 };
 
 const IRELAND_CENTER: [number, number] = [53.4129, -8.2439];
@@ -99,6 +106,28 @@ function SetViewOnLocation({ userLoc, zoom }) {
     }, [userLoc, zoom, map]);
     return null;
 }
+
+const createClusterCustomIcon = (cluster: any) => {
+    const count = cluster.getChildCount();
+    let c = ' marker-cluster-';
+
+    // Density-based classification
+    if (count < 10) {
+        c += 'small'; // Green for low density
+    } else if (count < 100) {
+        c += 'medium'; // Orange for medium density  
+    } else {
+        c += 'large'; // Red for high density
+    }
+
+    const L = (window as any).L;
+    return L.divIcon({
+        html: `<div><span>${count}</span></div>`,
+        className: 'marker-cluster' + c,
+        iconSize: new L.Point(40, 40)
+    });
+};
+
 
 export default function LeafletMap() {
     const [venues, setVenues] = useState<Venue[]>([]);
@@ -144,7 +173,14 @@ export default function LeafletMap() {
 
             />
             {userLoc && <UserLocationMarker position={[userLoc.lat, userLoc.lng]} />}
-            <MarkerClusterGroup>
+            <MarkerClusterGroup
+                iconCreateFunction={createClusterCustomIcon}
+                maxClusterRadius={80}            // Optimal clustering radius
+                disableClusteringAtZoom={16}     // Stop clustering at high zoom
+                //removeOutsideVisibleBounds={false} // Critical: prevents zoom issues
+                animate={true}                   // Smooth animations
+                animateAddingMarkers={true}      // Animate new markers
+            >
                 {venues.map(v => {
                     const d = distanceMiles(
                         mapCenter.lat,
@@ -155,19 +191,32 @@ export default function LeafletMap() {
                     if (d > RADIUS_MILES) return null;
 
                     const colors: Record<string, string> = {
-                        Cafe: '#dc3545',
-                        Pub: '#28a745',
-                        Restaurant: '#007bff',
-                        Coffee: '#dc3545'
+                        cafe: '#dc3545',
+                        pub: '#ffc107',
+                        bar: '#ffc107',
+                        restaurant: '#007bff',
+                        diner: '#007bff',
+                        coffee: '#dc3545',
+                        park: '#28a745',
+                        campground: '#28a745',
+                        venue: '#28a745',
                     };
+                    let fillColor = 'gray'; // Default color if no match found
+                    for (var type in colors) {
+                        if (v.Type.toLowerCase().includes(type)) {
+                            fillColor = colors[type];
+                            break;
+                        }
+                    }
 
                     return (
+
                         <CircleMarker
                             key={`${v.Name}-${v.Latitude}`}
                             center={[v.Latitude, v.Longitude]}
                             pathOptions={{
                                 color: '#000',
-                                fillColor: colors[v.Type] || 'gray',
+                                fillColor: fillColor,
                                 fillOpacity: 0.8
                             }}
                             radius={14}
@@ -214,16 +263,44 @@ export default function LeafletMap() {
                                             Website
                                         </a>
                                     )}
-                                    <a
-                                        href={`https://www.google.com/maps/search/?api=1&query=${v.Latitude},${v.Longitude}`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="block text-sm text-blue-600 underline"
-                                    >
-                                        Directions
-                                    </a>
+                                    {
+                                        v.Phone && (
+                                            <a
+                                                href={`tel:${v.Phone}`}
+                                                className="block text-sm text-blue-600 underline"
+                                            >
+                                                Call: {v.Phone}
+                                            </a>
+                                        )
+                                    }
+                                    {
+                                        v.GooglePlaceId && (
+                                            <a
+                                                href={`https://www.google.com/maps/place/?q=place_id:${v.GooglePlaceId}`}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="block text-sm text-blue-600 underline"
+                                            >
+                                                Directions
+                                            </a>
+                                        )
+
+
+                                    }
+                                    {
+                                        !v.GooglePlaceId && (
+                                            <a
+                                                href={`https://www.google.com/maps/search/?api=1&query=${v.Latitude},${v.Longitude}`}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="block text-sm text-blue-600 underline"
+                                            >
+                                                Directions
+                                            </a>
+                                        )
+                                    }
                                     <div className="mt-2 text-xs text-gray-500">
-                                        {v.Type} — {v.Location}
+                                        {v.Type} — {v.State}
                                     </div>
                                 </div>
                             </Popup>

@@ -874,7 +874,7 @@ select.form-control {
 /* Legend */
 .legend {
   background: var(--color-surface);
-  border-bottom: 1px solid var(--color-border);
+  /*border-bottom: 1px solid var(--color-border);*/
   padding: var(--space-8) var(--space-16);
   z-index: 999;
 }
@@ -917,12 +917,54 @@ select.form-control {
 }
 
 .legend-marker.pub {
+  background: #ffc107;
+}
+
+.legend-marker.park {
   background: #28a745;
 }
 
 .legend-marker.outdoor-only {
   background: var(--color-transparent);
   color: var(--color-text);
+}
+
+.marker-cluster {
+  background-clip: padding-box;
+  border-radius: 50% !important;
+  text-align: center;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #fff;
+}
+
+.marker-cluster-small {
+  background: #28a745 !important;   /* Green for low density */
+}
+
+.marker-cluster-medium {
+  background: #ffc107 !important;   /* Orange for medium density */
+  color: #333 !important;           /* Better contrast on yellow */
+}
+
+.marker-cluster-large {
+  background: #dc3545 !important;   /* Red for high density */
+}
+
+.marker-cluster div {
+  width: 40px;
+  height: 40px;
+  background-clip: padding-box;
+  border-radius: 50% !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  pointer-events: none;
 }
 
 /* Map Container */
