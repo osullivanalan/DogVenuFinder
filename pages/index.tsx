@@ -22,6 +22,8 @@ export default function HomePage() {
             <Head>
                 <title>Find Doggie Venues Near Me</title>
                 <meta name="description" content="Discover cafés, pubs, and restaurants within 100 miles." />
+                <link rel="icon" href="/favicon.png" />
+
             </Head>
             <Header/>
             <LeafletMap />
