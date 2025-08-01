@@ -5,8 +5,6 @@ import LoadingScreen from '../components/ui/LoadingScreen';
 import React from 'react';
 import 'leaflet/dist/leaflet.css';
 
-import Header from '../components/ui/Header';
-
 import { useRef } from 'react';
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
@@ -26,7 +24,7 @@ export default function HomePage() {
                 <link rel="icon" href={faviconPath} />
 
             </Head>
-            <Header/>
+            {/*<Header/>*/}
             <LeafletMap />
         </>
     );

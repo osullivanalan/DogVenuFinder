@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@tailwindcss/postcss": "^4.1.11",
     "leaflet": "^1.9.4",
     "next": "^15.4.4",
     "react": "^19.1.0",
@@ -14,8 +15,11 @@
     "@types/react": "^19.1.8",
     "@typescript-eslint/eslint-plugin": "^8.38.0",
     "@typescript-eslint/parser": "^8.38.0",
+    "autoprefixer": "^10.4.21",
     "eslint": "^9.32.0",
     "eslint-config-next": "^15.4.4",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.11",
     "typescript": "5.8.3"
   },
   "scripts": {
@@ -25,5 +29,4 @@
     "lint": "next lint"
   },
   "homepage": "https://osullivanalan.github.io/DogVenuFinder"
-
 }

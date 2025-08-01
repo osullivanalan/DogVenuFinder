@@ -1,6 +1,9 @@
 // pages/_app.tsx
 
-import '../styles/style.css'; // Your global CSS, must come first!
+
+import '../styles/globals.css'; // Tailwind CSS - MUST come first
+import 'leaflet/dist/leaflet.css'; // Leaflet CSS only
+import '../styles/style.css'; // Import Leaflet CSS
 
 import type { AppProps } from 'next/app';
 import React from 'react';

@@ -4,26 +4,12 @@ import { distanceMiles, MILES_TO_KM } from '../../lib/geo';
 import * as React from 'react';
 import { Marker, Popup, useMap, Tooltip } from 'react-leaflet';
 import RecenterButton from './RecenterButton';   // ← add
-
+import type { MarkerClusterGroupProps } from 'react-leaflet-markercluster';
+import FilterLegend, { VenueType } from '../ui/FilterLegend';
 
 const DEFAULT_ZOOM = 12;
-const USER_LOC_COLOR = 'white';   // or use '#888'/'#bbb' for a grey shade
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
-const UserLocationMarker = ({ position }: { position: [number, number] }) =>
-    position ? <CircleMarker
-        center={position}
-        pathOptions={{ color: USER_LOC_COLOR, fillColor: USER_LOC_COLOR, fillOpacity: 0.4 }}
-        radius={12} // Size as desired
-    > <Tooltip
-        direction="center"   // keeps it centred
-        permanent            // always visible
-        className="outdoor-flag"
-        offset={[0, 0]}      // no offset
-    >
-            📍
-        </Tooltip>
-    </CircleMarker> : null;
 
 
 const isOpen = (Hours) => {
@@ -52,9 +38,6 @@ const isOpen = (Hours) => {
     return openMins <= nowMins && nowMins <= closeMins;
 };
 
-
-
-
 const MapContainer = dynamic(
     () => import('react-leaflet').then(mod => mod.MapContainer),
     { ssr: false }
@@ -67,7 +50,7 @@ const CircleMarker = dynamic(
     () => import('react-leaflet').then(mod => mod.CircleMarker),
     { ssr: false }
 );
-import type { MarkerClusterGroupProps } from 'react-leaflet-markercluster';
+
 
 const MarkerClusterGroup = dynamic<MarkerClusterGroupProps>(
     () => import('react-leaflet-markercluster').then(mod => mod.default),
@@ -129,12 +112,88 @@ const createClusterCustomIcon = (cluster: any) => {
 };
 
 
+// Venue type definitions - MUST match exactly with your data
+const VENUE_GROUPS: Record<string, { color: string; aliases: string[], emoji: string }> = {
+    'Cafe': {
+        color: '#dc3545',
+        aliases: ['cafe', 'coffee'],
+        emoji: '☕'
+
+    },
+    'Eat': {
+        color: '#007bff',
+        aliases: ['restaurant', 'diner'],
+        emoji: '🍽️'
+    },
+    'Pub': {
+        color: '#ffc107',
+        aliases: ['pub', 'bar'],
+        emoji: '🍺'
+    },
+    'Park': {
+        color: '#28a745',
+        aliases: ['park', 'campground', 'venue'],
+        emoji: '🌳'
+    },
+};
+
+// Helper function to get venue group
+function getVenueGroup(venueType: string): string | null {
+    const lowerType = venueType.toLowerCase();
+    for (const [groupName, group] of Object.entries(VENUE_GROUPS)) {
+        if (group.aliases.some(alias => lowerType.includes(alias))) {
+            return groupName;
+        }
+    }
+    return null;
+}
+
+// Helper function to get venue color
+function getVenueColor(venueType: string): string {
+    const group = getVenueGroup(venueType);
+    return group ? VENUE_GROUPS[group].color : '#666666';
+}
+
 export default function LeafletMap() {
     const [venues, setVenues] = useState<Venue[]>([]);
     const [userLoc, setUserLoc] = useState<{
         lat: number;
         lng: number;
     } | null>(null);
+
+
+    // Filter state - all selected by default
+    const [selectedTypes, setSelectedTypes] = useState<string[]>(() =>
+        Object.keys(VENUE_GROUPS)
+    );
+
+    // Build legend data with CORRECT counts
+    const legendTypes: VenueType[] = Object.entries(VENUE_GROUPS).map(([groupName, group]) => {
+        // Count venues that match this group's aliases
+        const count = venues.filter(venue => {
+            const venueType = venue.Type?.toLowerCase() || '';
+            return group.aliases.some(alias => venueType.includes(alias));
+        }).length;
+
+        return {
+            id: groupName,
+            label: groupName,
+            emoji: group.emoji, // Add this
+            color: group.color,
+            count: count
+        };
+    });
+
+    // Filter functions
+    const toggleType = (typeId: string) =>
+        setSelectedTypes(current =>
+            current.includes(typeId)
+                ? current.filter(id => id !== typeId)
+                : [...current, typeId]
+        );
+
+    const selectAll = () => setSelectedTypes(Object.keys(VENUE_GROUPS));
+    const selectNone = () => setSelectedTypes([]);
 
     useEffect(() => {
         fetch(`${basePath}/locations.json`)
@@ -158,157 +217,167 @@ export default function LeafletMap() {
     const mapCenter = userLoc ?? { lat: IRELAND_CENTER[0], lng: IRELAND_CENTER[1] };
 
     return (
-        <MapContainer
-            center={[mapCenter.lat, mapCenter.lng]}
-            zoom={DEFAULT_ZOOM}
-            style={{ height: '100vh', width: '100%' }}
-            scrollWheelZoom
-        >
-            <RecenterButton />
-            <SetViewOnLocation userLoc={userLoc} zoom={DEFAULT_ZOOM} />
-            <TileLayer
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                attribution="© OpenStreetMap contributors"
-                maxZoom={50}
-
+        <div className="flex flex-col h-full ">
+            {/* LEGEND */}
+            <FilterLegend
+                types={legendTypes}
+                selected={selectedTypes}
+                toggle={toggleType}
+                selectAll={selectAll}
+                selectNone={selectNone}
             />
-            {userLoc && <UserLocationMarker position={[userLoc.lat, userLoc.lng]} />}
-            <MarkerClusterGroup
-                iconCreateFunction={createClusterCustomIcon}
-                maxClusterRadius={80}            // Optimal clustering radius
-                disableClusteringAtZoom={16}     // Stop clustering at high zoom
-                //removeOutsideVisibleBounds={false} // Critical: prevents zoom issues
-                animate={true}                   // Smooth animations
-                animateAddingMarkers={true}      // Animate new markers
+
+            <MapContainer
+                center={[mapCenter.lat, mapCenter.lng]}
+                zoom={DEFAULT_ZOOM}
+                style={{ height: '100vh', width: '100%' }}
+                scrollWheelZoom
             >
-                {venues.map(v => {
-                    const d = distanceMiles(
-                        mapCenter.lat,
-                        mapCenter.lng,
-                        v.Latitude,
-                        v.Longitude
-                    );
-                    if (d > RADIUS_MILES) return null;
+                <RecenterButton />
+                <SetViewOnLocation userLoc={userLoc} zoom={DEFAULT_ZOOM} />
+                <TileLayer
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    attribution="© OpenStreetMap contributors"
+                    maxZoom={50}
 
-                    const colors: Record<string, string> = {
-                        cafe: '#dc3545',
-                        pub: '#ffc107',
-                        bar: '#ffc107',
-                        restaurant: '#007bff',
-                        diner: '#007bff',
-                        coffee: '#dc3545',
-                        park: '#28a745',
-                        campground: '#28a745',
-                        venue: '#28a745',
-                    };
-                    let fillColor = 'gray'; // Default color if no match found
-                    for (var type in colors) {
-                        if (v.Type.toLowerCase().includes(type)) {
-                            fillColor = colors[type];
-                            break;
-                        }
-                    }
-
-                    return (
-
-                        <CircleMarker
-                            key={`${v.Name}-${v.Latitude}`}
-                            center={[v.Latitude, v.Longitude]}
-                            pathOptions={{
-                                color: '#000',
-                                fillColor: fillColor,
-                                fillOpacity: 0.8
-                            }}
-                            radius={14}
-
+                />
+                {userLoc && (
+                    <CircleMarker
+                        center={[userLoc.lat, userLoc.lng]}
+                        pathOptions={{ color: '#fff', fillColor: '#ffffff', fillOpacity: 0.4 }}
+                        radius={11}>
+                        <Tooltip
+                            direction="center"   // keeps it centred
+                            permanent            // always visible
+                            className="outdoor-flag"
+                            offset={[0, 0]}      // no offset
                         >
-                            {v.OutDoorOnly && (
-                                <Tooltip
-                                    direction="center"   // keeps it centred
-                                    permanent            // always visible
-                                    className="outdoor-flag"
-                                    offset={[0, 0]}      // no offset
-                                >
-                                    T
-                                </Tooltip>
-                            )}
-                            <Popup>
-                                <div className="space-y-2 w-56">
-                                    <h3 className="text-lg font-bold">{v.Name}</h3>
-                                    <p className="text-gray-700 text-sm">{v.Address}</p>
-                                    <div className="flex items-center space-x-2">
+                            📍</Tooltip>
+                    </CircleMarker>
 
-                                        {isOpen(v.Hours) === undefined ? null
-                                            : isOpen(v.Hours)
-                                                ? <span className="badge badge-success">Open now</span>
-                                                : <span className="badge badge-error">Closed</span>}
+                )}
 
+                <MarkerClusterGroup
+                    iconCreateFunction={createClusterCustomIcon}
+                    maxClusterRadius={80}            // Optimal clustering radius
+                    disableClusteringAtZoom={16}     // Stop clustering at high zoom
+                    //removeOutsideVisibleBounds={false} // Critical: prevents zoom issues
+                    animate={true}                   // Smooth animations
+                    animateAddingMarkers={true}      // Animate new markers
+                >
+                    {venues.map(v => {
 
-                                    </div>
-                                    {v.OutDoorOnly && (
-                                        <div className="flex items-center bg-yellow-50 border border-yellow-400 text-yellow-800 text-xs rounded px-2 py-1">
-                                            <i className="fas fa-sun mr-1"></i> Outdoor only
-                                        </div>
-                                    )}
-                                    {v.Info && !v.OutDoorOnly && (
-                                        <p className="bg-blue-50 text-blue-700 text-xs rounded px-2 py-1">{v.Info}</p>
-                                    )}
-                                    {v.Link && (
-                                        <a
-                                            href={v.Link}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="block text-sm text-blue-600 underline"
-                                        >
-                                            Website
-                                        </a>
-                                    )}
-                                    {
-                                        v.Phone && (
+                        const venueGroup = getVenueGroup(v.Type || '');
+                        // Skip if venue group is not selected
+                        if (!venueGroup || !selectedTypes.includes(venueGroup)) {
+                            return null;
+                        }
+
+                        const d = distanceMiles(
+                            mapCenter.lat,
+                            mapCenter.lng,
+                            v.Latitude,
+                            v.Longitude
+                        );
+                        if (d > RADIUS_MILES) return null;
+
+                        const color = getVenueColor(v.Type || '');
+
+                        return (
+
+                            <CircleMarker
+                                key={v.GooglePlaceId ?? `${v.Latitude - v.Longitude}`}
+                                center={[v.Latitude, v.Longitude]}
+                                pathOptions={{
+                                    color: '#fff',
+                                    fillColor: color,
+                                    fillOpacity: 0.9,
+                                    weight: 2
+                                }}
+                                radius={12}
+
+                            >
+                                {v.OutDoorOnly && (
+                                    <Tooltip
+                                        direction="center"   // keeps it centred
+                                        permanent            // always visible
+                                        className="outdoor-flag"
+                                        offset={[0, 0]}      // no offset
+                                    >
+                                        T
+                                    </Tooltip>
+                                )}
+                                <Popup>
+                                    <div className="venue-popup">
+                                        <h3 className="venue-popup__title">{v.Name}</h3>
+                                        <p className="venue-popup__address">{v.Address}</p>
+
+                                        {isOpen(v.Hours) !== undefined && (
+                                            <div
+                                                className={`venue-popup__badge ${isOpen(v.Hours) ? "venue-popup__badge--open" : "venue-popup__badge--closed"
+                                                    }`}
+                                            >
+                                                <span className={isOpen(v.Hours) ? "venue-popup__status-dot" : ""}>⬤</span>
+                                                {isOpen(v.Hours) ? "Open" : "Closed"}
+                                            </div>
+                                        )}
+
+                                        {v.OutDoorOnly && (
+                                            <div className="venue-popup__badge venue-popup__outdoor-badge">
+                                                <span>🌞</span>
+                                                Outdoor only
+                                            </div>
+                                        )}
+                                        {v.Info && !v.OutDoorOnly && (
+                                            <p className="venue-popup__info">{v.Info}</p>
+                                        )}
+
+                                        {v.Link && (
+                                            <a
+                                                href={v.Link}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="venue-popup__action-link"
+                                            >
+                                                Website ↗
+                                            </a>
+                                        )}
+                                        {v.Phone && (
                                             <a
                                                 href={`tel:${v.Phone}`}
-                                                className="block text-sm text-blue-600 underline"
+                                                className="venue-popup__action-link"
                                             >
                                                 Call: {v.Phone}
                                             </a>
-                                        )
-                                    }
-                                    {
-                                        v.GooglePlaceId && (
+                                        )}
+                                        {(v.GooglePlaceId || (v.Latitude && v.Longitude)) && (
                                             <a
-                                                href={`https://www.google.com/maps/place/?q=place_id:${v.GooglePlaceId}`}
+                                                href={
+                                                    v.GooglePlaceId
+                                                        ? `https://www.google.com/maps/place/?q=place_id:${v.GooglePlaceId}`
+                                                        : `https://www.google.com/maps/search/?api=1&query=${v.Latitude},${v.Longitude}`
+                                                }
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="block text-sm text-blue-600 underline"
+                                                className="venue-popup__action-link"
                                             >
-                                                Directions
+                                                Directions ↗
                                             </a>
-                                        )
+                                        )}
 
-
-                                    }
-                                    {
-                                        !v.GooglePlaceId && (
-                                            <a
-                                                href={`https://www.google.com/maps/search/?api=1&query=${v.Latitude},${v.Longitude}`}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="block text-sm text-blue-600 underline"
-                                            >
-                                                Directions
-                                            </a>
-                                        )
-                                    }
-                                    <div className="mt-2 text-xs text-gray-500">
-                                        {v.Type} — {v.State}
+                                        <div className="venue-popup__footer">
+                                            {v.Type} — {v.State}
+                                        </div>
                                     </div>
-                                </div>
-                            </Popup>
+                                </Popup>
 
-                        </CircleMarker>
-                    );
-                })}
-            </MarkerClusterGroup>
-        </MapContainer>
+
+                            </CircleMarker>
+                        );
+                    })}
+                </MarkerClusterGroup>
+            </MapContainer>
+
+        </div>
     );
 }

@@ -1,0 +1,5 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Keep only essential custom CSS that can't be replaced with Tailwind */
